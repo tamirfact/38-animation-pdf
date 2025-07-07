@@ -1,0 +1,157 @@
+body {
+  background: linear-gradient(120deg, #e0e7ff 0%, #f0fdfa 100%);
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+#pdf-container {
+  perspective: 1600px;
+  width: 100vw;
+  height: 100vh;
+  min-width: 0;
+  min-height: 0;
+  max-width: 100vw;
+  max-height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  overflow: scroll;
+  box-sizing: border-box;
+}
+
+.page {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 420px;
+  height: 595px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10), 0 1.5px 6px rgba(0,0,0,0.08);
+  transition:
+    transform 0.9s cubic-bezier(.77,0,.18,1),
+    box-shadow 0.7s cubic-bezier(.77,0,.18,1),
+    filter 0.7s cubic-bezier(.77,0,.18,1),
+    opacity 0.7s cubic-bezier(.77,0,.18,1);
+  opacity: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-clip: padding-box;
+  margin: 0;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.page canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 16px;
+  box-shadow: none;
+  object-fit: contain;
+}
+
+/* 1. Normal PDF view: absolutely position all pages, stack vertically with offset, z-index: first page highest */
+#pdf-container.normal .page {
+  filter: none;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10), 0 1.5px 6px rgba(0,0,0,0.08);
+  opacity: 1;
+  z-index: calc(100 - var(--i));
+  transform:
+    translate(-50%, calc(-50% + var(--i) * 630px));
+}
+
+/* 2. Stacked isometric */
+#pdf-container.stacked .page {
+  z-index: calc(100 - var(--i));
+  transform:
+    translate(-50%, -50%)
+    rotateX(32deg)
+    rotateZ(-32deg)
+    translateY(calc(var(--i) * -22px))
+    translateZ(calc(var(--i) * 38px));
+  box-shadow: 0 12px 40px 0 rgba(0,0,0,0.18), 0 0.5px 2px rgba(0,0,0,0.10);
+  opacity: 1;
+}
+
+/* 3. Glow and grow */
+#pdf-container.glow .page {
+  filter: drop-shadow(0 0 32px #00f8ff) brightness(1.13);
+  z-index: calc(100 - var(--i));
+  transform:
+    translate(-50%, -50%)
+    rotateX(32deg)
+    rotateZ(-32deg)
+    translateY(calc(var(--i) * -22px))
+    translateZ(calc(var(--i) * 38px))
+    scale(1.09);
+  box-shadow: 0 18px 60px #00f8ff99, 0 2px 8px #00e0ff33;
+  opacity: 1;
+}
+
+.glow-active {
+  filter: drop-shadow(0 0 48px #00f8ff) brightness(1.18) !important;
+  transform: scale(1.13) !important;
+  box-shadow: 0 24px 80px #00f8ffcc, 0 2px 8px #00e0ff33 !important;
+  transition:
+    filter 0.22s cubic-bezier(.77,0,.18,1),
+    transform 0.22s cubic-bezier(.77,0,.18,1),
+    box-shadow 0.22s cubic-bezier(.77,0,.18,1);
+  z-index: inherit;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 600px) {
+  .page {
+    width: 90vw;
+    height: calc(90vw * 595 / 420);
+  }
+}
+
+.arrow-btn {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 2.8rem;
+  background: rgba(255,255,255,0.85);
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  box-shadow: 0 2px 12px #0001;
+  color: #00b0ff;
+  cursor: pointer;
+  z-index: 9999;
+  transition: background 0.2s, box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+#arrow-back {
+  left: 32px;
+}
+#arrow-next {
+  right: 32px;
+}
+.arrow-btn:hover {
+  background: #e0f7fa;
+  box-shadow: 0 4px 24px #00b0ff33;
+}
+@media (max-width: 600px) {
+  .arrow-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 2rem;
+  }
+  #arrow-back { left: 8px; }
+  #arrow-next { right: 8px; }
+} 
