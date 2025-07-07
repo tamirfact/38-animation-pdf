@@ -1,11 +1,9 @@
-const url = '123_Maple_Street_Lease_Agreement.pdf';
+const url = 'p4.pdf';
 const container = document.getElementById('pdf-container');
-const arrowBack = document.getElementById('arrow-back');
-const arrowNext = document.getElementById('arrow-next');
-
-const STATES = ['normal', 'stacked', 'glow', 'stacked', 'normal'];
-let currentState = 0;
-let animating = true;
+const playBtn = document.getElementById('play-btn');
+const logoOverlay = document.getElementById('logo-overlay');
+const topBar = document.getElementById('top-bar');
+let isAnimating = false;
 
 async function renderPDF() {
   const pdf = await pdfjsLib.getDocument(url).promise;
@@ -28,25 +26,30 @@ async function renderPDF() {
 }
 
 function animateSequence() {
+  if (isAnimating) return;
+  isAnimating = true;
+  playBtn.disabled = true;
+  playBtn.style.opacity = 0.6;
+  topBar.classList.add('top-bar-up');
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('glow-active'));
   setTimeout(() => {
     container.className = 'stacked';
     setTimeout(() => {
       container.className = 'glow';
-      applyGlowToPages(() => {
-        container.className = 'stacked';
-        setTimeout(() => {
-          container.className = 'normal';
-          setTimeout(() => {
-            animating = false;
-            showArrows();
-          }, 400);
-        }, 1100);
-      });
+      showLogoOverlay();
+      applyGlowToPages();
     }, 1200);
   }, 1400);
 }
 
-function applyGlowToPages(callback) {
+function showLogoOverlay() {
+  logoOverlay.classList.add('logo-overlay-visible');
+}
+function hideLogoOverlay() {
+  logoOverlay.classList.remove('logo-overlay-visible');
+}
+
+function applyGlowToPages() {
   const pages = Array.from(document.querySelectorAll('.page'));
   const delay = 90; // ms between each page's glow
   pages.forEach((page, idx) => {
@@ -54,51 +57,24 @@ function applyGlowToPages(callback) {
       page.classList.add('glow-active');
       setTimeout(() => {
         page.classList.remove('glow-active');
-        if (idx === pages.length - 1 && callback) {
-          setTimeout(callback, 200);
+        if (idx === pages.length - 1) {
+          setTimeout(() => {
+            container.className = 'stacked';
+            hideLogoOverlay();
+            setTimeout(() => {
+              container.className = 'normal';
+              isAnimating = false;
+              playBtn.disabled = false;
+              playBtn.style.opacity = 1;
+              topBar.classList.remove('top-bar-up');
+            }, 1100);
+          }, 200);
         }
       }, 350);
     }, idx * delay);
   });
 }
 
-function showArrows() {
-  arrowBack.style.display = 'flex';
-  arrowNext.style.display = 'flex';
-}
-
-function hideArrows() {
-  arrowBack.style.display = 'none';
-  arrowNext.style.display = 'none';
-}
-
-function goToState(idx) {
-  if (animating) return;
-  currentState = idx;
-  const state = STATES[currentState];
-  if (state === 'glow') {
-    container.className = 'glow';
-    animating = true;
-    applyGlowToPages(() => {
-      animating = false;
-    });
-  } else {
-    container.className = state;
-  }
-}
-
-arrowNext.addEventListener('click', () => {
-  if (animating) return;
-  if (currentState < STATES.length - 1) {
-    goToState(currentState + 1);
-  }
-});
-
-arrowBack.addEventListener('click', () => {
-  if (animating) return;
-  if (currentState > 0) {
-    goToState(currentState - 1);
-  }
-});
+playBtn.addEventListener('click', animateSequence);
 
 renderPDF(); 

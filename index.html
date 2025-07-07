@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>PDF 3D Animation</title>
+  <title>factifying 3D Animation</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
     /* Hide scrollbars for a cleaner look */
@@ -11,9 +11,24 @@
   </style>
 </head>
 <body>
+  <div id="top-bar">
+    <div class="top-bar-left"><img src="top-bar-left.png" alt="Left UI" /></div>
+    <div class="top-bar-right"><img src="top-bar-right.png" alt="Right UI" /></div>
+  </div>
+  <button id="play-btn" title="Play Animation">▶ Play Animation</button>
+  <div id="logo-overlay">
+    <svg width="390" height="260" viewBox="0 0 390 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M370.382 148.14L241.159 19.1253C215.607 -6.37511 174.201 -6.37511 148.648 19.1253L148.388 19.3861L19.5295 147.983L19.1644 148.348C-6.38815 173.849 -6.38815 215.202 19.1644 240.703C44.717 266.203 86.1227 266.203 111.675 240.703C137.228 215.202 137.228 173.849 111.675 148.348C106.878 143.551 105.991 135.572 110.789 130.722L131.022 110.541C135.82 105.743 143.851 106.578 148.648 111.428C174.201 136.928 215.607 136.928 241.159 111.428C245.957 106.63 253.988 105.743 258.785 110.541L279.019 130.722C283.816 135.52 282.982 143.499 278.132 148.348C252.58 173.849 252.58 215.202 278.132 240.703C303.685 266.203 345.09 266.203 370.643 240.703C396.196 215.202 396.196 173.849 370.643 148.348C370.539 148.244 370.434 148.192 370.382 148.088V148.14ZM83.9325 213.064C73.7114 223.285 57.1283 223.285 46.9594 213.064C36.7384 202.843 36.7384 186.312 46.9594 176.143C57.1804 165.922 73.7636 165.922 83.9325 176.143C94.1535 186.364 94.1535 202.895 83.9325 213.064ZM213.416 83.7891C203.195 94.0101 186.612 94.0101 176.443 83.7891C166.222 73.568 166.222 57.037 176.443 46.8682C186.664 36.6471 203.247 36.6471 213.416 46.8682C223.637 57.0892 223.637 73.6202 213.416 83.7891ZM342.9 213.064C332.679 223.285 316.096 223.285 305.927 213.064C295.706 202.843 295.706 186.312 305.927 176.143C316.148 165.922 332.731 165.922 342.9 176.143C353.121 186.364 353.121 202.895 342.9 213.064Z" fill="url(#paint0_linear_2303_129)"/>
+      <defs>
+        <linearGradient id="paint0_linear_2303_129" x1="0" y1="0" x2="239.826" y2="359.799" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#5A42FCaa"/>
+          <stop offset="1" stop-color="#444AFF"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <div class="logo-glow"></div>
+  </div>
   <div id="pdf-container"></div>
-  <button id="arrow-back" class="arrow-btn" style="display:none">&#8592;</button>
-  <button id="arrow-next" class="arrow-btn" style="display:none">&#8594;</button>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="script.js"></script>
 </body>
